@@ -2,13 +2,47 @@
 <html>
 <body>
 <script>
-  window.addEventListener("message", (event) => {
-    if (event.origin !== location.origin) return;
+(function () {
 
-    document.open();
-    document.write(event.data);
-    document.close();
-  });
+  const originalLog = console.log;
+
+  console.log = function () {
+
+    let output = "";
+
+    for (let i = 0; i < arguments.length; i++) {
+      if (typeof arguments[i] === "object") {
+        output += JSON.stringify(arguments[i]) + " ";
+      } else {
+        output += arguments[i] + " ";
+      }
+    }
+
+    // send to editor
+    window.parent.postMessage(
+      {
+        type: "console",
+        message: output
+      },
+      location.origin
+    );
+
+    originalLog.apply(console, arguments);
+  };
+
+})();
+</script>
+
+<script>
+window.addEventListener("message", function (event) {
+
+  if (event.origin !== location.origin) return;
+
+  document.open();
+  document.write(event.data);
+  document.close();
+
+});
 </script>
 </body>
 </html>

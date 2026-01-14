@@ -115,6 +115,13 @@ iframe{
     overflow-y: auto;
 }
 
+#console {
+    height: 90%;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    color: #00ff00;
+}
+
 footer {
     height: 5%;
     width: 100%;

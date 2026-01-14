@@ -8,6 +8,8 @@ const consoleDiv = document.querySelector('.console')
 
 const submit = document.querySelector('.submit')
 
+const editorConsole = document.querySelector('#console')
+
 let currentURL = null 
 
 function updateLine() {
@@ -82,6 +84,17 @@ submit.addEventListener("click", () => {
       location.origin
     );
   };
+});
+
+window.addEventListener("message", function (event) {
+
+  if (!event.data) return;
+
+  if (event.data.type === "console") {
+    editorConsole.innerText += event.data.message + "\n";
+    editorConsole.scrollTop = editorConsole.scrollHeight;
+  }
+
 });
 
 
