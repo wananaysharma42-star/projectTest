@@ -97,4 +97,62 @@ window.addEventListener("message", function (event) {
 
 });
 
+async function handleSubmit() {
+  clearConsole();
+  await runPreview();
+}
 
+async function runPreview() {
+  preview.src = "preview.html";
+  await waitForIframe();
+  sendUserCode();
+}
+
+function waitForIframe() {
+  return new Promise(resolve => preview.onload = resolve);
+}
+
+function readFileAsText(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      resolve(reader.result);
+    };
+
+    reader.onerror = function () {
+      reject("File read error");
+    };
+
+    reader.readAsText(file);
+  });
+}
+
+const fileInput = document.getElementById("fileInput");
+
+fileInput.addEventListener("change", async function () {
+
+  if (fileInput.files.length === 0) return;
+
+  const file = fileInput.files[0];
+  const content = await readFileAsText(file);
+
+  code.value = content;   
+  updateLine();
+});
+
+
+
+async function runPreview() {
+  preview.src = "preview.html";
+
+  await new Promise(function (resolve) {
+    preview.onload = resolve;
+  });
+
+  preview.contentWindow.postMessage(code.value, location.origin);
+}
+
+submit.addEventListener("click", function () {
+  runPreview();
+});
