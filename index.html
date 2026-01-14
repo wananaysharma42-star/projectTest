@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CODE EDITOR</div>
+    </header>
+    <main>
+        <div class="panel">
+            <div class="codeSection">
+                <h5>CODE</h5>
+                <div class="code">
+                    <div id="line"></div>
+                    <textarea id="code"></textarea>
+                </div>
+                <div class="buttons">
+                    <button class="submit">submit</button>
+                    <button class="addFile">add file</button>
+                </div>
+            </div>
+            <div class="preview">
+                <h5>PREVIEW</h5>
+                <iframe
+  id="preview"
+  src="preview.html"
+  sandbox="
+    allow-scripts
+    allow-same-origin
+    allow-popups
+  "
+></iframe>
+            </div>
+        </div>
+        <div class="console">
+            <h4>CONSOLE</h4>
+            <iframe src=""></iframe>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+<script src="script.js"></script>
+</html>

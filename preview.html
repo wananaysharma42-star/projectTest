@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+  window.addEventListener("message", (event) => {
+    if (event.origin !== location.origin) return;
+
+    document.open();
+    document.write(event.data);
+    document.close();
+  });
+</script>
+</body>
+</html>
