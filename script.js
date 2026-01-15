@@ -10,6 +10,12 @@ const submit = document.querySelector('.submit')
 
 const editorConsole = document.querySelector('#console')
 
+const codeLogo = document.querySelector('#codeLogo')
+
+const consoleLogo = document.querySelector('#consoleLogo')
+
+const panel = document.querySelector('.panel')
+
 let currentURL = null 
 
 function updateLine() {
@@ -156,3 +162,25 @@ async function runPreview() {
 submit.addEventListener("click", function () {
   runPreview();
 });
+
+codeLogo.addEventListener('click' , function(){
+  code.value = ''
+  fileInput.value = null ;
+})
+
+let isDisplay = false
+
+consoleLogo.addEventListener('click' , function(){
+  if(!isDisplay){
+    editorConsole.style.display = 'block' ;
+    consoleDiv.style.height = '30%' ;
+    panel.style.height = '70%' ;
+    isDisplay = true ;
+  }else{
+    editorConsole.style.display = 'none' ;
+    panel.style.height = '95%' ;
+    consoleDiv.style.height = '5%' ;
+    isDisplay = false ;
+  }
+})
+
