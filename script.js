@@ -24,6 +24,8 @@ const previewSection = document.querySelector('.preview')
 
 const codeSection = document.querySelector('.codeSection')
 
+const codeArr = []
+
 function updateLine() {
   const lines = code.value.split("\n").length;
   let numbers = "";
@@ -96,6 +98,21 @@ submit.addEventListener("click", () => {
       location.origin 
     );
   };
+
+  let obj = {
+    codeVal : code.value ,
+    consoleVal : editorConsole.innerHTML
+  }
+
+  if(codeArr.length < 10){
+    codeArr.push(obj) ;
+  }else{
+    codeArr.shift() ;
+    codeArr.push(obj) ;
+  }
+
+  localStorage.setItem("codeData" , JSON.stringify(codeArr)) ;
+
 });
 
 window.addEventListener("message", function (event) {
@@ -268,4 +285,15 @@ window.addEventListener('resize' , function(){
     }
   }
 })
+
+let reload = function(){
+  let data = JSON.parse(localStorage.getItem("codeData")) || [] ;
+  if(data.length == 0){
+    return ;
+  }
+  code.value = data[data.length-1].codeVal ;
+  editorConsole.innerHTML = data[data.length-1].consoleVal ;
+} 
+
+reload() ;
 
