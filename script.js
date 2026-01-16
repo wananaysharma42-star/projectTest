@@ -30,7 +30,7 @@ const title = document.querySelector('.title')
 
 const history = document.querySelector('.history')
 
-const codeArr = []
+let codeArr = JSON.parse(localStorage.getItem("codeData")) || [];
 
 function updateLine() {
   const lines = code.value.split("\n").length;
@@ -309,7 +309,7 @@ window.addEventListener('resize' , function(){
 })
 
 let reload = function(){
-  let data = JSON.parse(localStorage.getItem("codeData")) || [] ;
+  data = JSON.parse(localStorage.getItem("codeData")) || [] ;
   if(data.length == 0){
     return ;
   }
