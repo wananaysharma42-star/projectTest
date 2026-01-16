@@ -16,6 +16,14 @@ const consoleLogo = document.querySelector('#consoleLogo')
 
 const panel = document.querySelector('.panel') 
 
+const themeToggle = document.querySelector('.logo')
+
+const previewLogo = document.querySelector('#previewLogo')
+
+const previewSection = document.querySelector('.preview')
+
+const codeSection = document.querySelector('.codeSection')
+
 function updateLine() {
   const lines = code.value.split("\n").length;
   let numbers = "";
@@ -154,7 +162,10 @@ async function runPreview() {
     preview.onload = resolve;
   });
 
-  preview.contentWindow.postMessage(code.value, location.origin);
+  preview.contentWindow.postMessage({
+    code : code.value ,
+    theme : currentTheme
+  }, location.origin);
 }
 
 submit.addEventListener("click", function () {
@@ -179,6 +190,82 @@ consoleLogo.addEventListener('click' , function(){
     panel.style.height = '95%' ;
     consoleDiv.style.height = '5%' ;
     isDisplay = false ;
+  }
+})
+
+let currentTheme = "dark";
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  currentTheme = document.body.classList.contains("light")
+    ? "light"
+    : "dark";
+  runPreview();
+});
+
+let isPreview = false ;
+
+previewSection.addEventListener('click' , function(){
+  if(window.innerWidth > 1024){
+    if(!isPreview){
+      previewSection.style.width = '50%'
+      codeSection.style.width = '50%'
+      previewSection.style.height = '100%'
+      codeSection.style.height = '100%'
+      isPreview = true
+    }else{
+      previewSection.style.width = '5%'
+      codeSection.style.width = '95%'
+      previewSection.style.height = '100%'
+      codeSection.style.height = '100%'
+      isPreview = false
+    }
+  }else if(window.innerWidth <= 1024){
+    if(!isPreview){
+      previewSection.style.height = '50%'
+      codeSection.style.height = '50%'
+      previewSection.style.width = '100%'
+      codeSection.style.width = '100%'
+      isPreview = true
+    }else{
+      previewSection.style.height = '5%'
+      codeSection.style.height = '95%'
+      previewSection.style.width = '100%'
+      codeSection.style.width = '100%'
+      isPreview = false
+    }
+  }
+})
+
+window.addEventListener('resize' , function(){
+  if(window.innerWidth > 1024){
+    if(isPreview){
+      previewSection.style.width = '50%'
+      codeSection.style.width = '50%'
+      previewSection.style.height = '100%'
+      codeSection.style.height = '100%'
+      isPreview = true
+    }else{
+      previewSection.style.width = '5%'
+      codeSection.style.width = '95%'
+      previewSection.style.height = '100%'
+      codeSection.style.height = '100%'
+      isPreview = false
+    }
+  }else if(window.innerWidth <= 1024){
+    if(isPreview){
+      previewSection.style.height = '50%'
+      codeSection.style.height = '50%'
+      previewSection.style.width = '100%'
+      codeSection.style.width = '100%'
+      isPreview = true
+    }else{
+      previewSection.style.height = '5%'
+      codeSection.style.height = '95%'
+      previewSection.style.width = '100%'
+      codeSection.style.width = '100%'
+      isPreview = false
+    }
   }
 })
 

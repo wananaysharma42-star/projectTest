@@ -35,13 +35,22 @@
 
 <script>
 window.addEventListener("message", function (event) {
-
   if (event.origin !== location.origin) return;
 
-  document.open();
-  document.write(event.data);
-  document.close();
+  const { code, theme } = event.data;
 
+  const style =
+    theme === "dark"
+      ? `<style>
+           body { background:#020617; color:#e5e7eb; }
+         </style>`
+      : `<style>
+           body { background:#ffffff; color:#0f172a; }
+         </style>`;
+
+  document.open();
+  document.write(style + code);
+  document.close();
 });
 </script>
 </body>
