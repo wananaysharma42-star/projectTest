@@ -85,7 +85,7 @@ submit.addEventListener("click", () => {
   preview.onload = () => {
     preview.contentWindow.postMessage(
       code.value,
-      location.origin
+      location.origin 
     );
   };
 });
