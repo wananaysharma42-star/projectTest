@@ -14,9 +14,7 @@ const codeLogo = document.querySelector('#codeLogo')
 
 const consoleLogo = document.querySelector('#consoleLogo')
 
-const panel = document.querySelector('.panel')
-
-let currentURL = null 
+const panel = document.querySelector('.panel') 
 
 function updateLine() {
   const lines = code.value.split("\n").length;
