@@ -24,6 +24,12 @@ const previewSection = document.querySelector('.preview')
 
 const codeSection = document.querySelector('.codeSection')
 
+const historyLogo = document.querySelector('.historyLogo') 
+
+const title = document.querySelector('.title')
+
+const history = document.querySelector('.history')
+
 const codeArr = []
 
 function updateLine() {
@@ -89,31 +95,51 @@ code.addEventListener('keydown' , function(e){
     }
 })
 
+let titleName = "";
+
 submit.addEventListener("click", () => {
   preview.src = "preview.html";
+  runPreview();
+  title.style.display = "block";
+  title.focus();
+});
 
-  preview.onload = () => {
-    preview.contentWindow.postMessage(
-      code.value,
-      location.origin 
-    );
+let isSaving = false;
+
+title.addEventListener("keydown", function (e) {
+  if (e.key !== "Enter") return;
+  if (isSaving) return;
+
+  e.preventDefault();
+
+  const titleName = title.value.trim();
+  if (!titleName) return;
+
+  isSaving = true;
+
+  const his = document.createElement("div");
+  his.className = "his";
+  his.innerText = titleName;
+  history.appendChild(his);
+
+  const obj = {
+    codeVal: code.value,
+    consoleVal: editorConsole.innerHTML,
+    title: titleName
   };
 
-  let obj = {
-    codeVal : code.value ,
-    consoleVal : editorConsole.innerHTML
-  }
+  if (codeArr.length >= 10) codeArr.shift();
+  codeArr.push(obj);
 
-  if(codeArr.length < 10){
-    codeArr.push(obj) ;
-  }else{
-    codeArr.shift() ;
-    codeArr.push(obj) ;
-  }
+  localStorage.setItem("codeData", JSON.stringify(codeArr));
 
-  localStorage.setItem("codeData" , JSON.stringify(codeArr)) ;
+  title.value = "";
+  title.style.display = "none";
 
+  // allow next save
+  setTimeout(() => isSaving = false, 200);
 });
+
 
 window.addEventListener("message", function (event) {
 
@@ -184,10 +210,6 @@ async function runPreview() {
     theme : currentTheme
   }, location.origin);
 }
-
-submit.addEventListener("click", function () {
-  runPreview();
-});
 
 codeLogo.addEventListener('click' , function(){
   code.value = ''
@@ -293,7 +315,32 @@ let reload = function(){
   }
   code.value = data[data.length-1].codeVal ;
   editorConsole.innerHTML = data[data.length-1].consoleVal ;
+  data.forEach((obj) => {
+    let his = document.createElement('div')
+    his.className = 'his'
+    history.appendChild(his)
+    his.innerText = obj.title
+  })
 } 
 
 reload() ;
+
+historyLogo.addEventListener('click' , function(){
+  if(history.style.display == 'block'){
+    history.style.display = 'none'
+  }else{
+    history.style.display = 'block'
+  }
+})
+
+history.addEventListener('click' , function(e){
+  let val = e.target.innerText
+  let data = JSON.parse(localStorage.getItem("codeData")) || [];
+  data.forEach((obj) => {
+    if(obj.title == val){
+      code.value = obj.codeVal
+      editorConsole.innerHTML = obj.consoleVal
+    }
+  })
+})
 

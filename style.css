@@ -22,6 +22,7 @@ header {
   background: #020617;
   border-bottom: 1px solid #1e293b;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 20px;
 }
@@ -32,6 +33,68 @@ header {
   letter-spacing: 1px;
   color: #38bdf8;
 }
+
+.title {
+  position: fixed;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 640px;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+  display: none;
+  z-index: 1200;
+}
+
+.title::placeholder {
+  color: #64748b;
+}
+
+.his {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.his:hover {
+  background: #334155;
+  transform: translateX(2px);
+}
+
+.his:active {
+  background: #475569;
+}
+
+
+.history {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 640px;
+  height: 50vh;
+  padding: 10px;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  display: none;
+  overflow-y: auto;
+  z-index: 1100;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
 
 /* ================= MAIN ================= */
 main {
@@ -183,6 +246,20 @@ iframe {
   display: none;
 }
 
+.history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.history::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+
 /* ================= LIGHT MODE ================= */
 body.light {
   background: #f8fafc;
@@ -250,6 +327,28 @@ body.light #console {
   color: #15803d;
 }
 
+body.light .title {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e5e7eb;
+}
+
+body.light .history {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+body.light .his {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+body.light .his:hover {
+  background: #e2e8f0;
+}
+
+
 /* ================= RESPONSIVE ================= */
 
 /* Tablet */
@@ -285,6 +384,11 @@ body.light #console {
 
   #code {
     font-size: 12px;
+  }
+
+  .history,
+  .title {
+    width: 90%;
   }
 }
 
