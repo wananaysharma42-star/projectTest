@@ -1,3 +1,7 @@
+/* =======================
+   DOM ELEMENT REFERENCES
+   ======================= */
+
 const code = document.querySelector('#code')
 
 const line = document.querySelector('#line')
@@ -30,8 +34,38 @@ const title = document.querySelector('.title')
 
 const history = document.querySelector('.history')
 
+const fileInput = document.getElementById("fileInput");
+
+/* =======================
+   STATE VARIABLES
+   ======================= */
+
+// Stores saved code sessions
 let codeArr = JSON.parse(localStorage.getItem("codeData")) || [];
 
+// Controls title name in history section
+let titleName = "";
+
+// Controls title input visibility
+let isVisible = false ;
+
+// Prevents rapid duplicate saves
+let isSaving = false;
+
+// Console panel toggle state
+let isDisplay = false;
+
+// Preview layout toggle state
+let isPreview = false ;
+
+// Current editor theme
+let currentTheme = "dark";
+
+/* =======================
+   LINE NUMBER HANDLING
+   ======================= */
+
+// Updates line numbers based on textarea content
 function updateLine() {
   const lines = code.value.split("\n").length;
   let numbers = "";
@@ -43,6 +77,7 @@ function updateLine() {
   line.innerHTML = numbers;
 }
 
+// Sync line numbers on input & scroll
 code.addEventListener("input", updateLine);
 
 code.addEventListener("scroll", () => {
@@ -51,7 +86,12 @@ code.addEventListener("scroll", () => {
 
 updateLine();
 
+/* =======================
+   EDITOR KEYBOARD FEATURES
+   ======================= */
+
 code.addEventListener('keydown' , function(e){
+  // HTML boilerplate shortcut: type "!" and press Enter
     if(e.key === 'Enter'){
         const cursorPos = code.selectionStart
         const beforeText = code.value.slice(0 , cursorPos) 
@@ -76,6 +116,7 @@ code.addEventListener('keydown' , function(e){
             allText[currentLineIndex] = snippet
             code.value = allText.join('\n')
 
+            // Move cursor inside <body>
             const bodyInd = code.value.indexOf('<body>') + 7
             code.selectionStart = code.selectionEnd = bodyInd
             updateLine()
@@ -83,6 +124,7 @@ code.addEventListener('keydown' , function(e){
         }
     }
 
+    // Insert spaces instead of losing focus on Tab
     if (e.key === "Tab") {
             e.preventDefault();
 
@@ -95,9 +137,11 @@ code.addEventListener('keydown' , function(e){
     }
 })
 
-let titleName = "";
-let isVisible = false ;
+/* =======================
+   SUBMIT & TITLE HANDLING
+   ======================= */
 
+// Show title input when submitting code
 submit.addEventListener("click", (e) => {
   e.stopPropagation() ;
   preview.src = "preview.html";
@@ -107,8 +151,7 @@ submit.addEventListener("click", (e) => {
   title.focus();
 });
 
-let isSaving = false;
-
+// Hide title input on outside click
 window.addEventListener('click' , function(e){
     if(!title.contains(e.target)){
       if(isVisible){
@@ -121,6 +164,7 @@ window.addEventListener('click' , function(e){
     }
 })
 
+// Save code snapshot on Enter inside title input
 title.addEventListener("keydown", function (e) {
   if (e.key !== "Enter") return;
   if (isSaving) return;
@@ -132,17 +176,20 @@ title.addEventListener("keydown", function (e) {
 
   isSaving = true;
 
+  // Add history UI entry
   const his = document.createElement("div");
   his.className = "his";
   his.innerText = titleName;
   history.appendChild(his);
 
+  // Save snapshot
   const obj = {
     codeVal: code.value,
     consoleVal: editorConsole.innerHTML,
     title: titleName
   };
 
+  // Limit history to 10 items
   if (codeArr.length >= 10){
     codeArr.shift();
     history.firstElementChild.remove() ;
@@ -151,6 +198,7 @@ title.addEventListener("keydown", function (e) {
 
   localStorage.setItem("codeData", JSON.stringify(codeArr));
 
+  // Reset title input
   title.value = "";
   title.style.display = "none";
 
@@ -158,7 +206,11 @@ title.addEventListener("keydown", function (e) {
   setTimeout(() => isSaving = false, 200);
 });
 
+/* =======================
+   CONSOLE MESSAGE HANDLING
+   ======================= */
 
+// Receive console logs from iframe
 window.addEventListener("message", function (event) {
 
   if (!event.data) return;
@@ -170,14 +222,14 @@ window.addEventListener("message", function (event) {
 
 });
 
-async function handleSubmit() {
-  clearConsole();
-  await runPreview();
-}
-
+// Clear custom console output
 function clearConsole(){
   editorConsole.innerText = "";
 }
+
+/* =======================
+   FILE IMPORT SUPPORT
+   ======================= */
 
 function readFileAsText(file) {
   return new Promise(function (resolve, reject) {
@@ -195,8 +247,6 @@ function readFileAsText(file) {
   });
 }
 
-const fileInput = document.getElementById("fileInput");
-
 fileInput.addEventListener("change", async function () {
 
   if (fileInput.files.length === 0) return;
@@ -208,8 +258,11 @@ fileInput.addEventListener("change", async function () {
   updateLine();
 });
 
+/* =======================
+   PREVIEW EXECUTION
+   ======================= */
 
-
+// Reload iframe and send code for execution
 async function runPreview() {
   preview.src = "preview.html";
 
@@ -223,13 +276,18 @@ async function runPreview() {
   }, location.origin);
 }
 
+
+/* =======================
+   UI TOGGLES
+   ======================= */
+
+// Clear editor & file input
 codeLogo.addEventListener('click' , function(){
   code.value = ''
   fileInput.value = null ;
 })
 
-let isDisplay = false
-
+// Toggle console panel
 consoleLogo.addEventListener('click' , function(){
   if(!isDisplay){
     editorConsole.style.display = 'block' ;
@@ -244,8 +302,7 @@ consoleLogo.addEventListener('click' , function(){
   }
 })
 
-let currentTheme = "dark";
-
+// Toggle light / dark theme
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light");
   currentTheme = document.body.classList.contains("light")
@@ -254,8 +311,11 @@ themeToggle.addEventListener("click", () => {
   runPreview();
 });
 
-let isPreview = false ;
+/* =======================
+   PREVIEW LAYOUT HANDLING
+   ======================= */
 
+// Toggle preview size on click
 previewSection.addEventListener('click' , function(){
   if(window.innerWidth > 1024){
     if(!isPreview){
@@ -288,6 +348,7 @@ previewSection.addEventListener('click' , function(){
   }
 })
 
+// Toggle between size of viewport
 window.addEventListener('resize' , function(){
   if(window.innerWidth > 1024){
     if(isPreview){
@@ -320,6 +381,11 @@ window.addEventListener('resize' , function(){
   }
 })
 
+/* =======================
+   HISTORY RESTORE
+   ======================= */
+
+// Reload saved sessions on page load
 let reload = function(){
   data = JSON.parse(localStorage.getItem("codeData")) || [] ;
   if(data.length == 0){
@@ -337,6 +403,7 @@ let reload = function(){
 
 reload() ;
 
+// Toggle history panel
 historyLogo.addEventListener('click' , function(){
   if(history.style.display == 'block'){
     history.style.display = 'none'
@@ -345,6 +412,7 @@ historyLogo.addEventListener('click' , function(){
   }
 })
 
+// Load selected history item
 history.addEventListener('click' , function(e){
   let val = e.target.innerText
   let data = JSON.parse(localStorage.getItem("codeData")) || [];

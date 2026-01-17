@@ -3,31 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <title>Document</title>
+    <title>Code Editor Web</title>
+    <!-- Main stylesheet for editor UI -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- =======================
+         HEADER / TOP BAR
+         ======================= -->
     <header>
+        <!-- App branding / logo -->
         <div class="logo">CODE EDITOR</div>
+
+        <!-- Toggle button for history panel -->
         <div class="historyLogo">HISTORY</div>
     </header>
+
+    <!-- =======================
+         TITLE INPUT (HIDDEN BY DEFAULT)
+         Used to name code snapshots
+         ======================= -->
     <input type="text" class="title" id="title">
+
+    <!-- =======================
+         HISTORY PANEL
+         Dynamically populated via JS
+         ======================= -->
     <div class="history"></div>
+
+    <!-- =======================
+         MAIN APPLICATION AREA
+         ======================= -->
     <main>
+
+        <!-- =======================
+             EDITOR + PREVIEW PANEL
+             ======================= -->
         <div class="panel">
+
+            <!-- =======================
+                 CODE EDITOR SECTION
+                 ======================= -->
             <div class="codeSection">
+
+                <!-- Code section header / clear button -->
                 <h5 id="codeLogo">CODE</h5>
+
+                <!-- Code editor container -->
                 <div class="code">
+
+                    <!-- Line numbers column -->
                     <div id="line"></div>
+
+                    <!-- Main code editor textarea -->
                     <textarea id="code"></textarea>
                 </div>
+
+                <!-- Editor action buttons -->
                 <div class="buttons">
+
+                    <!-- Run / submit code -->
                     <button class="submit">submit</button>
+
+                    <!-- Upload HTML file into editor -->
                     <input type="file" id="fileInput" accept=".html">
                 </div>
             </div>
+
+            <!-- =======================
+                 PREVIEW SECTION
+                 ======================= -->
             <div class="preview">
+
+                <!-- Preview section header -->
                 <h5 id="previewLogo">PREVIEW</h5>
+
+                <!-- Sandbox iframe to safely run user code -->
                 <iframe
   id="preview"
   src="preview.html"
@@ -39,14 +91,30 @@
 ></iframe>
             </div>
         </div>
+
+        <!-- =======================
+             CONSOLE OUTPUT SECTION
+             ======================= -->
         <div class="console">
+
+            <!-- Console toggle / header -->
             <h4 id="consoleLogo">CONSOLE</h4>
+
+            <!-- Custom console output (logs from iframe) -->
             <div id="console"></div>
         </div>
     </main>
-    <footer>
 
+    <!-- =======================
+         FOOTER (EMPTY FOR NOW)
+         ======================= -->
+    <footer>
+        <!-- Reserved for future use -->
     </footer>
 </body>
+
+<!-- =======================
+         MAIN SCRIPT FILE
+         ======================= -->
 <script src="script.js"></script>
 </html>

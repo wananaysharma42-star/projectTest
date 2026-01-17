@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html>
 <body>
+
+<!-- =====================================================
+     CONSOLE OVERRIDE
+     Intercepts console.log calls from user code
+     and forwards them to the parent editor via postMessage
+     ===================================================== -->
 <script>
 (function () {
 
+  // Preserve the original console.log behavior
   const originalLog = console.log;
 
+  // Override console.log
   console.log = function () {
 
     let output = "";
 
+    // Convert all arguments into a single string
     for (let i = 0; i < arguments.length; i++) {
       if (typeof arguments[i] === "object") {
+        // Safely stringify objects
         output += JSON.stringify(arguments[i]) + " ";
       } else {
         output += arguments[i] + " ";
       }
     }
 
-    // send to editor
+    // Send log message to parent (editor window)
     window.parent.postMessage(
       {
         type: "console",
@@ -26,19 +36,29 @@
       },
       location.origin
     );
-
+    
+    // Still log to iframe's own console (for debugging)
     originalLog.apply(console, arguments);
   };
 
 })();
 </script>
 
+<!-- =====================================================
+     MESSAGE RECEIVER
+     Receives code + theme data from the editor
+     Injects and executes user code safely inside iframe
+     ===================================================== -->
 <script>
 window.addEventListener("message", function (event) {
+
+  // Security check: only accept messages from same origin
   if (event.origin !== location.origin) return;
 
+  // Extract user code and current theme
   const { code, theme } = event.data;
 
+  // Apply editor theme inside preview iframe
   const style =
     theme === "dark"
       ? `<style>
@@ -47,7 +67,8 @@ window.addEventListener("message", function (event) {
       : `<style>
            body { background:#ffffff; color:#0f172a; }
          </style>`;
-
+  
+  // Replace iframe document with themed user code
   document.open();
   document.write(style + code);
   document.close();
