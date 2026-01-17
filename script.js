@@ -96,15 +96,28 @@ code.addEventListener('keydown' , function(e){
 })
 
 let titleName = "";
+let isVisible = false ;
 
-submit.addEventListener("click", () => {
+submit.addEventListener("click", (e) => {
+  e.stopPropagation() ;
   preview.src = "preview.html";
   runPreview();
   title.style.display = "block";
+  isVisible = true ;
   title.focus();
 });
 
 let isSaving = false;
+
+window.addEventListener('click' , function(e){
+    if(!title.contains(e.target)){
+      if(isVisible){
+        title.style.display = 'none' ;
+        isVisible = false ;
+        return ;
+      }
+    }
+})
 
 title.addEventListener("keydown", function (e) {
   if (e.key !== "Enter") return;
@@ -128,7 +141,10 @@ title.addEventListener("keydown", function (e) {
     title: titleName
   };
 
-  if (codeArr.length >= 10) codeArr.shift();
+  if (codeArr.length >= 10){
+    codeArr.shift();
+    history.firstElementChild.remove() ;
+  }
   codeArr.push(obj);
 
   localStorage.setItem("codeData", JSON.stringify(codeArr));
