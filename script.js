@@ -112,9 +112,11 @@ let isSaving = false;
 window.addEventListener('click' , function(e){
     if(!title.contains(e.target)){
       if(isVisible){
-        title.style.display = 'none' ;
-        isVisible = false ;
-        return ;
+        if(!submit.contains(e.target)){
+          title.style.display = 'none' ;
+          isVisible = false ;
+          return ;
+        }
       }
     }
 })
