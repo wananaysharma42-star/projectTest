@@ -175,14 +175,8 @@ async function handleSubmit() {
   await runPreview();
 }
 
-async function runPreview() {
-  preview.src = "preview.html";
-  await waitForIframe();
-  sendUserCode();
-}
-
-function waitForIframe() {
-  return new Promise(resolve => preview.onload = resolve);
+function clearConsole(){
+  editorConsole.innerText = "";
 }
 
 function readFileAsText(file) {
