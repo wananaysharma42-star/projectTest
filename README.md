@@ -7,8 +7,7 @@ No frameworks. No libraries. Just modern browser APIs.
 ---
 
 ## 🚀 Live Demo
-
-(Optional)  
+  
 https://wananaysharma42-star.github.io/projectTest/
 
 ---
